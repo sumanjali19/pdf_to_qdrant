@@ -1,0 +1,14 @@
+[
+    {
+        "type": "table",
+        "table": "Keywords\nInput\nOutput\nProcess",
+        "description": "Table-1 on page-7",
+        "page": 7
+    },
+    {
+        "type": "table",
+        "table": "Operator\tDescription\tExample\nAddition\t+\t1 + 2",
+        "description": "Table-2 on page-14",
+        "page": 14
+    }
+]
