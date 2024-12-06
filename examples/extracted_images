@@ -1,0 +1,32 @@
+[
+    {
+        "type": "image",
+        "description": "Image-1 on page-1",
+        "page": 1
+    },
+    {
+        "type": "image",
+        "description": "Image-2 on page-1",
+        "page": 1
+    },
+    {
+        "type": "image",
+        "description": "Image-1 on page-2",
+        "page": 2
+    },
+    {
+        "type": "image",
+        "description": "Image-2 on page-2",
+        "page": 2
+    },
+    {
+        "type": "image",
+        "description": "Image-1 on page-3",
+        "page": 3
+    },
+    {
+        "type": "image",
+        "description": "Image-2 on page-3",
+        "page": 3
+    }
+]
