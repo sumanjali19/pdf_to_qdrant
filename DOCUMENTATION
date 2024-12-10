@@ -1,13 +1,51 @@
-*Documentation* : PDF to Qdrant Processing
+1. Initialization
 
-Approach: This project will process a PDF document by extracting and structuring its textual content, images, and tables and store them in the Qdrant vector database for retrieval and analysis. The extracted data is embedded using SentenceTransformer for representation as vectors, thus facilitating semantic search. Metadata is added to make the content organized and contextual.
+The script first initializes all the libraries and components that it will use: 
+- Qdrant Client: It is set up to interact with a deployed Qdrant instance to store and query data.
+- SentenceTransformer Model: It is loaded to generate semantic embeddings of text data.
+- PDF Processing Libraries: PyMuPDF, commonly imported as `fitz`, and `pdfplumber` are set up to extract text, images, and tables from PDF documents.
 
-Tools/Libraries Used:
-PyMuPDF(fitz): To extract text and images from PDF.
-pdfplumber: This will be used for accurate table extraction. SentenceTransformers: To transform textual content into semantic embeddings using a pre-trained model, all-MiniLM-L6-v2. Qdrant Client: For storing and querying the vectorized data in Qdrant. UUID: This module is used to generate unique IDs for each data point. Python OS Module: To check whether or not the input file exists. Functionality
-Text Extraction: The paragraphs extracted from PDF pages get stored as vectorized data points in Qdrant.
-Image Metadata: Identifies images in the PDF, creates descriptive metadata, and stores. Table Processing: Extracts tabular data, formats as structured strings, and uploads with metadata.
+2. Function Definitions
 
+The code is structured into clear functions, each responsible for one key task. Here's a quick overview:
 
-Challenges:
-Query Execution: Although the code processes and stores data effectively, it currently lacks explicit functionality for querying the stored content in Qdrant.
+`store_in_qdrant(content, metadata)`:
+
+  - Encodes the given content into a vector using the SentenceTransformer model.
+  - Creates a unique ID for the data point.
+  - Prepares a Qdrant-compatible data structure with the vector and metadata.
+  - Uploads the data point to the specified collection in Qdrant.
+`process_text(pdf_path)`:
+
+- Opens the PDF using `PyMuPDF`.
+  - Iterates through pages and extracts textual content.
+  - Splits content into paragraphs, assigns metadata (e.g., page and paragraph numbers), and stores it in Qdrant.
+  
+- `process_images(pdf_path):
+  - Detects images in the PDF and generates metadata for each image, such as its location in the document.
+  - Stores descriptive metadata in Qdrant.
+- `process_tables(pdf_path)`:
+
+- It utilizes `pdfplumber` for table extraction from PDF pages.
+  - It formats tables into structured text and attaches descriptive metadata to them.
+  - It stores the formatted tables and metadata in Qdrant.
+---
+
+3. Main Processing Flow  
+
+The script provides a well-defined flow of how the PDF should be processed:
+1. Collection Configuration: Ensures that a collection by the name exists in Qdrant, with the required vector configuration.
+2. Text Processing: Extracts and uploads the textual content with contextual metadata.
+3. Image Processing: Extracts image metadata and uploads it.
+4. Table Processing: Extracts tables, structures them, and uploads the results.
+Each of these steps is executed within a `try-except` block to handle errors gracefully, ensuring the program continues even if one task fails.
+
+4. Challenges Addressed
+
+- Data Representation: Textual, visual, and tabular data are represented in a consistent metadata-rich format, making it easier to organize and retrieve.
+- Scalability: Leveraging Qdrant enables the effective storage and semantic searching of large amounts of data.
+- error Handling:Error handling and a modular design provide robust processing for a wide variety of PDF structures.
+
+5. Missing Functionality of Query
+
+While the core processing pipeline is robust, querying and retrieving data from Qdrant is not implemented directly in the script. A suggested solution would be to add an extra function for querying that prepares an embedding for the query text and then searches for the most relevant stored points within the collection.
