@@ -38,13 +38,13 @@ def store_in_qdrant(content, metadata, collection_name="suma"):
     embedding = model.encode(content).tolist()
 
     # Generate a UUID for the point ID
-    point_id = str(uuid.uuid4())  # UUID4 generates a valid unique ID
+    point_id = str(uuid.uuid4())
 
     # Construct Qdrant point
     point = PointStruct(
-        id=point_id,  # Use the generated UUID as the ID
-        vector={"default": embedding},  # Specify the vector name
-        payload=metadata  # Store content and metadata in payload
+        id=point_id,
+        vector={"default": embedding},  # Use the same vector name as in the collection config
+        payload=metadata
     )
 
     # Upsert into Qdrant
@@ -53,8 +53,11 @@ def store_in_qdrant(content, metadata, collection_name="suma"):
         points=[point]
     )
 
-# Process text from PDF
+
+# Function to process text with formatted metadata
+
 def process_text(pdf_path):
+    results = []
     with fitz.open(pdf_path) as pdf:
         for page_num, page in enumerate(pdf, start=1):
             text = page.get_text()
@@ -67,26 +70,34 @@ def process_text(pdf_path):
                         "paragraph": para_num
                     }
                     store_in_qdrant(para.strip(), metadata)
-                    print(f"Text stored with metadata: {metadata}")
+                    results.append(metadata)
+    print("Text results stored:")
+    for result in results:
+        print(f"{result}")
+    return results
 
-# Process images from PDF
+# Function to process images with formatted metadata
 def process_images(pdf_path):
+    results = []
     with fitz.open(pdf_path) as pdf:
         for page_num, page in enumerate(pdf, start=1):
             images = page.get_images(full=True)
             for img_index, img in enumerate(images, start=1):
-                xref = img[0]
-                base_image = pdf.extract_image(xref)
-                description = f"Image-{img_index} on page-{page_num}"
+                description = f"Flowchart or image extracted from page {page_num}"
                 metadata = {
                     "description": description,
                     "page": page_num
                 }
                 store_in_qdrant(description, metadata)
-                print(f"Image description stored with metadata: {metadata}")
+                results.append(metadata)
+    print("Image results stored:")
+    for result in results:
+        print(f"{result}")
+    return results
 
-# Process tables from PDF
+# Function to process tables with formatted metadata
 def process_tables(pdf_path):
+    results = []
     with pdfplumber.open(pdf_path) as pdf:
         for page_num, page in enumerate(pdf.pages, start=1):
             tables = page.extract_tables()
@@ -96,11 +107,15 @@ def process_tables(pdf_path):
                 )
                 metadata = {
                     "table": table_content,
-                    "description": f"Table-{table_index} on page-{page_num}",
+                    "description": f"Table-{table_index} extracted from page {page_num}",
                     "page": page_num
                 }
                 store_in_qdrant(table_content, metadata)
-                print(f"Table stored with metadata: {metadata}")
+                results.append(metadata)
+    print("Table results stored:")
+    for result in results:
+        print(f"{result}")
+    return results
 
 # Main function
 if __name__ == "__main__":
@@ -110,38 +125,25 @@ if __name__ == "__main__":
         print(f"Error: File {pdf_path} does not exist.")
         exit(1)
 
-    # Ensure the collection exists in Qdrant
-    def ensure_collection_exists(collection_name):
-        try:
-            qdrant_client.get_collection(collection_name)
-            print(f"Collection '{collection_name}' already exists.")
-        except Exception:
-            print(f"Collection '{collection_name}' does not exist. Creating it...")
-            qdrant_client.create_collection(
-                collection_name=collection_name,
-                vectors_config={
-                    "default": VectorParams(size=384, distance="Cosine")
-                }
-            )
-
     ensure_collection_exists("suma")
 
+    # Process text, images, and tables with desired formatting
     try:
         print("Processing text...")
-        process_text(pdf_path)
+        text_results = process_text(pdf_path)
     except Exception as e:
         print(f"Error processing text: {e}")
 
     try:
         print("Processing images...")
-        process_images(pdf_path)
+        image_results = process_images(pdf_path)
     except Exception as e:
         print(f"Error processing images: {e}")
 
     try:
         print("Processing tables...")
-        process_tables(pdf_path)
+        table_results = process_tables(pdf_path)
     except Exception as e:
         print(f"Error processing tables: {e}")
 
-    print("PDF processing completed and data stored in Qdrant.")
+    print("PDF processing completed. Output formatted.")
