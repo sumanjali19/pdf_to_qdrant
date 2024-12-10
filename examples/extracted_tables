@@ -1,14 +1,5 @@
 [
-    {
-        "type": "table",
-        "table": "Keywords\nInput\nOutput\nProcess",
-        "description": "Table-1 on page-7",
-        "page": 7
-    },
-    {
-        "type": "table",
-        "table": "Operator\tDescription\tExample\nAddition\t+\t1 + 2",
-        "description": "Table-2 on page-14",
-        "page": 14
-    }
+    {'table': '\tKeywords\t\nInput: putting data into an algorithm\nOutput: displaying data from an algorithm to the user\nProcess: an action performed to some data to make a change\nDecision: a comparison is used to decide if code is run, or not\t\t', 'description': 'Table-1 extracted from page 3', 'page': 3}
+{'table': 'An algorithm needs to ask a user to enter\ntheir name. It should take their name as an\ninput and then welcome them by name,\nfor example, "Welcome Sasha".\nDraw a flowchart for the algorithm.\nStart by identifying the steps required.\nStep 1: Ask them to enter their name.\nStep 2: Take their name as input.\nStep 3: Welcome them by their name.\nThen identify what type of symbols these\nsteps need.\nStep 1: Ask them to enter their name.\nOutput\nStep 2: Take their name as input.\nInput and store in variable\nStep 3: Welcome them by their name.\nOutput including variable\tDraw the flowchart following the steps\nidentified.', 'description': 'Table-1 extracted from page 4', 'page': 4}
+{'table': 'Operator\tDescription\n+\tAddition\n-\tSubtraction\n*\tMultiplication\n/\tDivision\n^\tPower of\nMOD\tModulus division (gives the remainder)\nDIV\tInteger division (gives the whole number)', 'description': 'Table-1 extracted from page 5', 'page': 5}
 ]
