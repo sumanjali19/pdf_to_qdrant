@@ -1,8 +1,10 @@
 
 [
-    {
-        "type": "text",
-        "page": 12,
-        "paragraph": 49
-    }
+    {'text': 'result = number * number', 'page': 22, 'paragraph': 13}
+{'text': 'OUTPUT result', 'page': 22, 'paragraph': 14}
+{'text': 'ENDPROCEDURE', 'page': 22, 'paragraph': 15}
+{'text': '', 'page': 22, 'paragraph': 16}
+{'text': 'PROCEDURE powerOf(number)', 'page': 22, 'paragraph': 17}
+{'text': 'result = number ^ number', 'page': 22, 'paragraph': 18}
+{'text': 'OUTPUT result', 'page': 22, 'paragraph': 19}
 ]
