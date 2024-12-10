@@ -1,0 +1,13 @@
+*Documentation* : PDF to Qdrant Processing
+
+Approach: This project will process a PDF document by extracting and structuring its textual content, images, and tables and store them in the Qdrant vector database for retrieval and analysis. The extracted data is embedded using SentenceTransformer for representation as vectors, thus facilitating semantic search. Metadata is added to make the content organized and contextual.
+
+Tools/Libraries Used:
+PyMuPDF(fitz): To extract text and images from PDF.
+pdfplumber: This will be used for accurate table extraction. SentenceTransformers: To transform textual content into semantic embeddings using a pre-trained model, all-MiniLM-L6-v2. Qdrant Client: For storing and querying the vectorized data in Qdrant. UUID: This module is used to generate unique IDs for each data point. Python OS Module: To check whether or not the input file exists. Functionality
+Text Extraction: The paragraphs extracted from PDF pages get stored as vectorized data points in Qdrant.
+Image Metadata: Identifies images in the PDF, creates descriptive metadata, and stores. Table Processing: Extracts tabular data, formats as structured strings, and uploads with metadata.
+
+
+Challenges:
+Query Execution: Although the code processes and stores data effectively, it currently lacks explicit functionality for querying the stored content in Qdrant.
